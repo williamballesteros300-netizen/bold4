@@ -4,10 +4,13 @@ const bodyParser = require("body-parser");
 const crypto = require("crypto");
 
 const app = express();
-app.use(cors());
+
+// ⚠️ Permitir CORS desde cualquier dominio
+app.use(cors({ origin: "*" }));
+
 app.use(bodyParser.json());
 
-// ⚠️ Tu llave secreta de Bold
+// ⚠️ Llave secreta de Bold (NO la pública)
 const BOLD_SECRET_KEY = "x-hvX8om77gzNBWEE7LlXQ";
 
 // Ruta para generar la firma
@@ -15,10 +18,10 @@ app.post("/generar-firma", (req, res) => {
   try {
     const { orderId, amount, currency } = req.body;
 
-    // Concatenamos exactamente como pide Bold: orderId + amount + currency + llave secreta
+    // Concatenamos valores en el orden correcto
     const payload = `${orderId}${amount}${currency}${BOLD_SECRET_KEY}`;
-    
-    // SHA256 simple
+
+    // Generamos hash SHA256
     const signature = crypto.createHash("sha256").update(payload).digest("hex");
 
     res.json({ integritySignature: signature });
