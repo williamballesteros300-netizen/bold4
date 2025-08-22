@@ -7,7 +7,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
-// ⚠️ Aquí pon tu API Key secreta de Bold (NO la pública)
+// ⚠️ Tu llave secreta de Bold
 const BOLD_SECRET_KEY = "x-hvX8om77gzNBWEE7LlXQ";
 
 // Ruta para generar la firma
@@ -15,12 +15,11 @@ app.post("/generar-firma", (req, res) => {
   try {
     const { orderId, amount, currency } = req.body;
 
-    // Concatenamos valores en el orden correcto
-    const payload = `${orderId}${amount}${currency}`;
-    const signature = crypto
-      .createHmac("sha256", BOLD_SECRET_KEY)
-      .update(payload)
-      .digest("hex");
+    // Concatenamos exactamente como pide Bold: orderId + amount + currency + llave secreta
+    const payload = `${orderId}${amount}${currency}${BOLD_SECRET_KEY}`;
+    
+    // SHA256 simple
+    const signature = crypto.createHash("sha256").update(payload).digest("hex");
 
     res.json({ integritySignature: signature });
   } catch (err) {
@@ -32,3 +31,4 @@ app.post("/generar-firma", (req, res) => {
 // Iniciar servidor
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`✅ Servidor escuchando en puerto ${PORT}`));
+
