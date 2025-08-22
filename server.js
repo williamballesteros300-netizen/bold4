@@ -4,7 +4,13 @@ const cors = require('cors');
 
 const app = express();
 
-app.use(cors({ origin: '*' }));
+// 🔥 Cambia '*' por tu dominio de Netlify
+app.use(cors({
+  origin: 'https://rainbow-dragon-0931a2.netlify.app',
+  methods: ['GET', 'POST'],
+  allowedHeaders: ['Content-Type']
+}));
+
 app.use(express.json());
 
 const BOLD_SECRET_KEY = process.env.BOLD_SECRET_KEY;
