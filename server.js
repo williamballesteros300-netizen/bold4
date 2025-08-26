@@ -11,7 +11,7 @@ app.use(cors({ origin: "*" }));
 app.use(bodyParser.json());
 
 // ⚠️ Llave secreta de Bold (NO la pública)
-const BOLD_SECRET_KEY = "x-hvX8om77gzNBWEE7LlXQ";
+const BOLD_SECRET_KEY = "XHKDuAzZ73Ad3hFtlV2yzw";
 
 // Ruta para generar la firma
 app.post("/generar-firma", (req, res) => {
